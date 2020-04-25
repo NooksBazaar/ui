@@ -31,7 +31,7 @@ const Content = styled.div`
 const Navigation = styled.div`
   display: flex;
   flex-direction: column;
-  background: white;
+  background: ${({ theme }) => theme.palette.background.paper};
   grid-area: nav;
   z-index: 1;
   padding-top: ${({ theme }) => theme.spacing(2)}px;

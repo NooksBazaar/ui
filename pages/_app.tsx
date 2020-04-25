@@ -7,9 +7,9 @@ import {
   StylesProvider,
 } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import theme from '../src/theme';
 import { Shell } from '../src/components/shell';
 import '../src/icons';
+import { themes } from '../src/themes';
 
 export default function MyApp(props: AppProps) {
   const { Component, pageProps } = props;
@@ -22,8 +22,10 @@ export default function MyApp(props: AppProps) {
     }
   }, []);
 
+  const theme = themes.light;
+
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>Nook's Bazaar!</title>
         <meta
@@ -41,6 +43,6 @@ export default function MyApp(props: AppProps) {
           </MuiThemeProvider>
         </ThemeProvider>
       </StylesProvider>
-    </React.Fragment>
+    </>
   );
 }

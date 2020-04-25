@@ -4,6 +4,7 @@ import { red } from '@material-ui/core/colors';
 // Create a theme instance.
 const theme = createMuiTheme({
   palette: {
+    type: 'light',
     primary: {
       main: '#556cd6',
     },
@@ -13,16 +14,10 @@ const theme = createMuiTheme({
     error: {
       main: red.A400,
     },
-    background: {
-      default: '#fff',
-    },
   },
+  mixins: {
+
+  }
 });
-
-type Theme = typeof theme;
-
-declare module 'styled-components' {
-  interface DefaultTheme extends Theme {}
-}
 
 export default theme;

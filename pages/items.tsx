@@ -1,12 +1,48 @@
 import React from 'react';
-import { Container } from '@material-ui/core';
+import {
+  Box,
+  Container,
+  Divider,
+  Paper,
+} from '@material-ui/core';
+import Axios from 'axios';
+import { stringify } from 'qs';
+import { GenericItem } from '../src/components/items/generic-item';
 
-export default function Items() {
+interface ItemsProps {
+  items: any[];
+}
+
+export default function Items({ items }: ItemsProps) {
   return (
-    <Container maxWidth="sm">
-      Here's a page about items. It hasn't been built yet. :(
-      <br /><br />
-      Yell at LavaToaster to write more code.
+    <Container maxWidth="lg">
+      <Paper>
+        {items.map((item) => (
+          <React.Fragment key={item.id}>
+            <Box p={1}>
+              <GenericItem item={item} />
+            </Box>
+            <Divider />
+          </React.Fragment>
+        ))}
+      </Paper>
     </Container>
   );
 }
+
+Items.getInitialProps = async () => {
+  const filter = {
+    limit: 15,
+    where: {
+      sourceSheet: 'Housewares',
+    }
+  };
+
+  const params = stringify({
+    filter: JSON.stringify(filter),
+  })
+
+  const res = await Axios.get(`http://api-dev.bazaar.ac/items?${params}`)
+
+  return { items: res.data };
+};
