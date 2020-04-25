@@ -1,15 +1,14 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
+import React from 'react';
+import { Container, Typography } from '@material-ui/core';
 
-const IndexPage = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <p>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-    </p>
-  </Layout>
-)
+export default function Index() {
+  return (
+    <Container maxWidth="sm">
+      <Typography variant="h4" component="h1" gutterBottom>
+        Welcome!
+      </Typography>
 
-export default IndexPage
+      <p>One day a site will exist here. Maybe? At some point?</p>
+    </Container>
+  );
+}
