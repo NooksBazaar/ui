@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Tooltip, Typography } from '@material-ui/core';
 import styled from 'styled-components';
 import { useLocalStore, useObserver } from 'mobx-react-lite';
+import { useTranslation } from 'react-i18next';
 
 const ItemImage = styled.img`
   max-width: 128px;
@@ -35,6 +36,7 @@ function NotForSale() {
 }
 
 export function GenericItem({ item }: GenericItemProps) {
+  const { t } = useTranslation('common');
   const store = useLocalStore(() => ({
     activeVariant: item.variants[0],
     displayVariant: item.variants[0],
@@ -61,8 +63,8 @@ export function GenericItem({ item }: GenericItemProps) {
         <Typography variant="h6">{store.displayVariant.name || item.name}</Typography>
 
         <Typography variant="body1">
-          <strong>Buy</strong>: {store.displayVariant.buy === -1 ? <NotForSale /> : store.displayVariant.buy} <br/>
-          <strong>Sell</strong>: {store.displayVariant.sell}
+          <strong>{t('item.buy', 'Buy:')}</strong> {store.displayVariant.buy === -1 ? <NotForSale /> : store.displayVariant.buy} <br/>
+          <strong>{t('item.sell', 'Sell:')}</strong> {store.displayVariant.sell}
         </Typography>
 
         {item.variants.map((variant: any) => {

@@ -5,7 +5,7 @@ import { List, ListItem, ListItemIcon, ListItemText, SvgIcon } from '@material-u
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { useTranslation } from 'react-i18next';
 
 const NAVIGATION_WIDTH = 19;
 
@@ -64,15 +64,16 @@ export interface ShellProps {
 
 export function Shell({ children }: ShellProps) {
   const router = useRouter();
+  const { t } = useTranslation('common');
 
   return (
     <Layout>
       <Navigation>
         <LogoContainer>
-          <Logo src={logo} alt="Upp Logo"/>
+          <Logo src={logo} alt={t('logo.alt', `Nook's Bazaar Logo`)}/>
         </LogoContainer>
 
-        <List component="nav" aria-label="main mailbox folders">
+        <List component="nav" aria-label="site navbar">
           <Link href="/">
             <ListItem
               button
@@ -83,7 +84,7 @@ export function Shell({ children }: ShellProps) {
                   <FontAwesomeIcon icon={['fas', 'home']} />
                 </SvgIcon>
               </ListItemIcon>
-              <ListItemText primary="Home" />
+              <ListItemText primary={t('page.home', 'Home')} />
             </ListItem>
           </Link>
           <Link href="/items">
@@ -96,7 +97,7 @@ export function Shell({ children }: ShellProps) {
                   <FontAwesomeIcon icon={['fas', 'blender-phone']} />
                 </SvgIcon>
               </ListItemIcon>
-              <ListItemText primary="Items" />
+              <ListItemText primary={t('page.items', 'Items')} />
             </ListItem>
           </Link>
         </List>
