@@ -17,7 +17,11 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
-    "types": ["webpack-env"]
+    "types": ["webpack-env"],
+    "paths": {
+      "*": ["./types/@types/*"]
+    },
+    "baseUrl": "."
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]

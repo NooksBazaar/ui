@@ -8,6 +8,9 @@ import { DEFAULT_LANG, LANG_EN } from './i18n';
 import { get } from 'lodash';
 import Axios from 'axios';
 
+import i18nextLocizeBackend from 'i18next-locize-backend';
+import locizeNodeLastUsed from 'locize-lastused';
+
 const logger = console;
 
 /**
@@ -339,55 +342,28 @@ export function i18nextLocize(lang: string, defaultLocales: I18nextResources) {
     );
   }
 
+  const i18nInstance = i18n;
+
   // Plugins will be dynamically added at runtime, depending on the runtime engine (node or browser)
-  const plugins = [
-    // XXX Only plugins that are common to all runtimes should be defined by default
-    initReactI18next, // passes i18next down to react-i18next
-  ];
+  i18nInstance.use(initReactI18next);
 
   // Dynamically load different modules depending on whether we're running node or browser engine
   if (isNode) {
-    // XXX Use "__non_webpack_require__" on the server
-    // loads translations, saves new keys to it (saveMissing: true)
-    // https://github.com/locize/i18next-locize-backend
-    const i18nextNodeLocizeBackend = __non_webpack_require__(
-      'i18next-locize-backend',
-    );
-    plugins.push(i18nextNodeLocizeBackend);
-
-    // sets a timestamp of last access on every translation segment on locize
-    // -> safely remove the ones not being touched for weeks/months
-    // https://github.com/locize/locize-node-lastused
-    const locizeNodeLastUsed = __non_webpack_require__('locize-lastused');
-    plugins.push(locizeNodeLastUsed);
+    i18nInstance.use(i18nextLocizeBackend as any);
+    i18nInstance.use(locizeNodeLastUsed);
   } else {
-    // XXX Use "require" on the browser, always take the "default" export specifically
-    // loads translations, saves new keys to it (saveMissing: true)
-    // https://github.com/locize/i18next-locize-backend
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const i18nextLocizeBackend = require('i18next-locize-backend').default;
-    plugins.push(i18nextLocizeBackend);
-
-    // InContext Editor of locize ?locize=true to show it
-    // https://github.com/locize/locize-editor
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const locizeEditor = require('locize-editor').default;
-    plugins.push(locizeEditor);
+    i18nInstance.use(i18nextLocizeBackend as any);
+    i18nInstance.use(require('locize-editor').default);
   }
 
-  const i18nInstance = i18n;
-
-  for (let plugin of plugins) {
-    i18nInstance.use(plugin);
-  }
 
   i18nInstance.init({
     // XXX See https://www.i18next.com/overview/configuration-options
     resources: defaultLocales,
     // preload: ['en'], // XXX Supposed to preload languages, doesn't work with Next
     cleanCode: true, // language will be lowercased EN --> en while leaving full locales like en-US
-    debug: process.env.NODE_ENV === 'development', // Only enable locally, too much noise otherwise
-    saveMissing: process.env.NODE_ENV === 'development', // Only save missing translations on development environment, to avoid outdated keys to be created from older staging deployments
+    debug: process.env.I18N_DEV, // Only enable locally, too much noise otherwise
+    saveMissing: process.env.I18N_DEV, // Only save missing translations on development environment, to avoid outdated keys to be created from older staging deployments
     saveMissingTo: defaultNamespace,
     lng: lang,
     fallbackLng: LANG_EN,
