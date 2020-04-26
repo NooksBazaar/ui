@@ -8,7 +8,7 @@ import { DEFAULT_LANG, LANG_EN } from './i18n';
 import { get } from 'lodash';
 import Axios from 'axios';
 
-import i18nextLocizeBackend from 'i18next-locize-backend';
+import i18nextLocizeBackend from '@nooksbazaar/i18next-locize-backend';
 import locizeNodeLastUsed from 'locize-lastused';
 
 const logger = console;

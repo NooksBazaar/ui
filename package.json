@@ -19,7 +19,7 @@
     "axios": "^0.19.2",
     "i18next": "^19.4.3",
     "i18next-browser-languagedetector": "^4.1.1",
-    "i18next-locize-backend": "^4.0.4",
+    "@nooksbazaar/i18next-locize-backend": "^4.0.5",
     "isomorphic-unfetch": "3.0.0",
     "locize-editor": "^3.0.0",
     "locize-lastused": "^3.0.2",

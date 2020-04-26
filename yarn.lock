@@ -1068,6 +1068,13 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
 
+"@nooksbazaar/i18next-locize-backend@^4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@nooksbazaar/i18next-locize-backend/-/i18next-locize-backend-4.0.5.tgz#99e5d417860e155f966acbf656f7d1c5edee3efa"
+  integrity sha512-L/qNgR7ZMEx1CxQGRh1SirVU0HtP4Hp/P+lYwAN+8OjL/hHZRtu15Ze+b9ePmukYLwvoBWg4Jz1T9+aKpWVwRw==
+  dependencies:
+    node-fetch "2.6.0"
+
 "@types/cookie@^0.3.3":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.3.3.tgz#85bc74ba782fb7aa3a514d11767832b0e3bc6803"
@@ -3134,13 +3141,6 @@ i18next-express-middleware@^1.9.1:
   integrity sha512-cLMO8pUC7sU6dfFvkREcim7fXOHVtGSZu3Lt8d1Ty7Z0nZiYs57Lb3CjDrXb671ibCnY2s/RCATsXlaujYwUQg==
   dependencies:
     cookies "0.7.1"
-
-i18next-locize-backend@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/i18next-locize-backend/-/i18next-locize-backend-4.0.4.tgz#c8d6bf13806e3542f38d7d3f809324da764f5236"
-  integrity sha512-iDRhrMuZ6cj1uMK3/QyH0X8Oy0ZtbSpWfChotj6+FHXPBgyyLLvufFiuMUMFLG8/lw6D/0Nb3pmFuc2NFmZYww==
-  dependencies:
-    node-fetch "2.6.0"
 
 i18next-node-fs-backend@^2.1.0:
   version "2.1.3"
