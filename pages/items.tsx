@@ -20,7 +20,7 @@ async function fetchItems(): Promise<any[]> {
     filter: JSON.stringify(filter),
   });
 
-  const res = await Axios.get(`http://api-dev.bazaar.ac/items?${params}`);
+  const res = await Axios.get(`https://api-dev.bazaar.ac/items?${params}`);
 
   return res.data;
 }

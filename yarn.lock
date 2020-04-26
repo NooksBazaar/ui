@@ -1075,10 +1075,10 @@
   dependencies:
     node-fetch "2.6.0"
 
-"@nooksbazaar/locize-lastused@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@nooksbazaar/locize-lastused/-/locize-lastused-3.0.2.tgz#06e537ced80591b3abc09f56a0b4091bd3bf377e"
-  integrity sha512-Jodbp3WGSrHXpBcv34++zMnG+VTkE2iI6Dzv0Shpx3HnCFVT8OEuoVEnnhbUKhSJoaXUWKxj1KmWNBItDoR3QQ==
+"@nooksbazaar/locize-lastused@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@nooksbazaar/locize-lastused/-/locize-lastused-3.0.3.tgz#50f6eee8dd1bc85abb4491e9e98d9c0e237e2bc9"
+  integrity sha512-0rtWyanRRQ0KMeIYx8De2WCsSBo80WNVvf0mPu3SZW6yendXEDn3EbesO7Y6mtklt9KWf37VvdZcNq3+K+pzIQ==
   dependencies:
     node-fetch "2.6.0"
 
