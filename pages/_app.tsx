@@ -16,7 +16,11 @@ import { Cookies } from '../types/cookies';
 import { IncomingMessage } from 'http';
 import universalLanguageDetect from '@unly/universal-language-detector/lib';
 import { LANG_EN, SUPPORTED_LANGUAGES } from '../src/i18n';
-import { fetchTranslations, i18nextLocize, I18nextResources } from '../src/i18n-locize';
+import {
+  fetchTranslations,
+  i18nextLocize,
+  I18nextResources,
+} from '../src/i18n-locize';
 import { I18nextProvider } from 'react-i18next';
 
 type MyAppProps = AppProps<{
@@ -74,7 +78,7 @@ MyApp.getInitialProps = async ({ ctx }: AppContextType) => {
     publicHeaders = {
       'accept-language': headers['accept-language'],
       'user-agent': headers['user-agent'],
-      'host': headers['host'],
+      host: headers['host'],
     };
   }
 
@@ -97,4 +101,4 @@ MyApp.getInitialProps = async ({ ctx }: AppContextType) => {
       defaultLocales,
     },
   };
-}
+};

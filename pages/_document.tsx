@@ -9,7 +9,7 @@ import { SUPPORTED_LANGUAGES } from '../src/i18n';
 
 type Props = {
   lang: string;
-}
+};
 
 export default class MyDocument extends Document<Props> {
   render() {
@@ -63,7 +63,8 @@ MyDocument.getInitialProps = async (ctx) => {
     fallbackLanguage: 'en', // Fallback language in case the user's language cannot be resolved
     acceptLanguageHeader: ctx.req?.headers['accept-language'], // Optional - Accept-language header will be used when resolving the language on the server side
     serverCookies: cookies, // Optional - Cookie "i18next" takes precedence over navigator configuration (ex: "i18next: fr"), will only be used on the server side
-    errorHandler: (error) => { // Optional - Use you own logger here, Sentry, etc.
+    errorHandler: (error) => {
+      // Optional - Use you own logger here, Sentry, etc.
       console.error(error);
 
       // Example if using Sentry in your app:

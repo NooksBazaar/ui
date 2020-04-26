@@ -1,7 +1,5 @@
 export const LANG_EN = 'en';
-export const SUPPORTED_LANGUAGES = [
-  LANG_EN,
-];
+export const SUPPORTED_LANGUAGES = [LANG_EN];
 
 /**
  * Language used by default if no user language can be resolved

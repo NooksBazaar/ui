@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Container,
-  Divider,
-  Paper,
-} from '@material-ui/core';
+import { Box, Container, Divider, Paper } from '@material-ui/core';
 import Axios from 'axios';
 import { stringify } from 'qs';
 import { GenericItem } from '../src/components/items/generic-item';
@@ -18,14 +13,14 @@ async function fetchItems(): Promise<any[]> {
     limit: 15,
     where: {
       sourceSheet: 'Housewares',
-    }
+    },
   };
 
   const params = stringify({
     filter: JSON.stringify(filter),
-  })
+  });
 
-  const res = await Axios.get(`http://api-dev.bazaar.ac/items?${params}`)
+  const res = await Axios.get(`http://api-dev.bazaar.ac/items?${params}`);
 
   return res.data;
 }

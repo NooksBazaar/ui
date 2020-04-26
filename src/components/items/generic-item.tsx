@@ -16,7 +16,7 @@ const VariantImage = styled.img`
   height: auto;
   cursor: pointer;
   border: 1px solid ${({ theme }) => theme.palette.divider};
-  margin-right: ${({ theme }) => theme.spacing(.5)}px;
+  margin-right: ${({ theme }) => theme.spacing(0.5)}px;
 
   &:last-of-type {
     margin-right: 0;
@@ -32,7 +32,7 @@ function NotForSale() {
     <Tooltip title="Not for sale">
       <abbr title="Not for sale">NFS</abbr>
     </Tooltip>
-  )
+  );
 }
 
 export function GenericItem({ item }: GenericItemProps) {
@@ -57,19 +57,31 @@ export function GenericItem({ item }: GenericItemProps) {
   return useObserver(() => (
     <Grid container>
       <Grid item sm={2}>
-        <ItemImage src={store.displayVariant.image} alt={item.name}/>
+        <ItemImage src={store.displayVariant.image} alt={item.name} />
       </Grid>
       <Grid item sm={10}>
-        <Typography variant="h6">{store.displayVariant.name || item.name}</Typography>
+        <Typography variant="h6">
+          {store.displayVariant.name || item.name}
+        </Typography>
 
         <Typography variant="body1">
-          <strong>{t('item.buy', 'Buy:')}</strong> {store.displayVariant.buy === -1 ? <NotForSale /> : store.displayVariant.buy} <br/>
+          <strong>{t('item.buy', 'Buy:')}</strong>{' '}
+          {store.displayVariant.buy === -1 ? (
+            <NotForSale />
+          ) : (
+            store.displayVariant.buy
+          )}{' '}
+          <br />
           <strong>{t('item.sell', 'Sell:')}</strong> {store.displayVariant.sell}
         </Typography>
 
         {item.variants.map((variant: any) => {
           return (
-            <Tooltip title={variant.variation} key={variant.variation} placement="top">
+            <Tooltip
+              title={variant.variation}
+              key={variant.variation}
+              placement="top"
+            >
               <VariantImage
                 src={variant.image}
                 onMouseOver={() => store.setDisplayVariant(variant)}

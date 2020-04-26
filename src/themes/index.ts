@@ -10,4 +10,4 @@ declare module 'styled-components' {
 export const themes = {
   light: lightTheme,
   dark: darkTheme,
-}
+};

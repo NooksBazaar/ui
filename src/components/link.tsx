@@ -90,6 +90,6 @@ function LinkCompat(props: LinkProps) {
   );
 }
 
-export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => (
-  <LinkCompat {...props} innerRef={ref} />
-));
+export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
+  (props, ref) => <LinkCompat {...props} innerRef={ref} />,
+);

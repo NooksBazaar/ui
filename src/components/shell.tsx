@@ -1,7 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import logo from '../assets/logo.svg';
-import { List, ListItem, ListItemIcon, ListItemText, SvgIcon } from '@material-ui/core';
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  SvgIcon,
+} from '@material-ui/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -70,15 +76,12 @@ export function Shell({ children }: ShellProps) {
     <Layout>
       <Navigation>
         <LogoContainer>
-          <Logo src={logo} alt={t('logo.alt', `Nook's Bazaar Logo`)}/>
+          <Logo src={logo} alt={t('logo.alt', `Nook's Bazaar Logo`)} />
         </LogoContainer>
 
         <List component="nav" aria-label="site navbar">
           <Link href="/">
-            <ListItem
-              button
-              selected={router.pathname === '/'}
-            >
+            <ListItem button selected={router.pathname === '/'}>
               <ListItemIcon>
                 <SvgIcon>
                   <FontAwesomeIcon icon={['fas', 'home']} />
@@ -88,10 +91,7 @@ export function Shell({ children }: ShellProps) {
             </ListItem>
           </Link>
           <Link href="/items">
-            <ListItem
-              button
-              selected={router.pathname === '/items'}
-            >
+            <ListItem button selected={router.pathname === '/items'}>
               <ListItemIcon>
                 <SvgIcon>
                   <FontAwesomeIcon icon={['fas', 'blender-phone']} />
