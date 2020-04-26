@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Container,
@@ -13,24 +13,7 @@ interface ItemsProps {
   items: any[];
 }
 
-export default function Items({ items }: ItemsProps) {
-  return (
-    <Container maxWidth="lg">
-      <Paper>
-        {items.map((item) => (
-          <React.Fragment key={item.id}>
-            <Box p={1}>
-              <GenericItem item={item} />
-            </Box>
-            <Divider />
-          </React.Fragment>
-        ))}
-      </Paper>
-    </Container>
-  );
-}
-
-Items.getInitialProps = async () => {
+async function fetchItems(): Promise<any[]> {
   const filter = {
     limit: 15,
     where: {
@@ -44,5 +27,38 @@ Items.getInitialProps = async () => {
 
   const res = await Axios.get(`http://api-dev.bazaar.ac/items?${params}`)
 
-  return { items: res.data };
+  return res.data;
+}
+
+export default function Items({ items }: ItemsProps) {
+  const [data, setData] = useState(items || []);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      return;
+    }
+
+    fetchItems().then(setData);
+  }, []);
+
+  return (
+    <Container maxWidth="lg">
+      <Paper>
+        {data.map((item) => (
+          <React.Fragment key={item.id}>
+            <Box p={1}>
+              <GenericItem item={item} />
+            </Box>
+            <Divider />
+          </React.Fragment>
+        ))}
+      </Paper>
+    </Container>
+  );
+}
+
+Items.getInitialProps = async () => {
+  const items = fetchItems();
+
+  return { items };
 };
