@@ -1,0 +1,12 @@
+diff --git a/node_modules/locize-lastused/package.json b/node_modules/locize-lastused/package.json
+index d08127d..a0d5bb8 100644
+--- a/node_modules/locize-lastused/package.json
++++ b/node_modules/locize-lastused/package.json
+@@ -2,7 +2,6 @@
+   "name": "locize-lastused",
+   "version": "3.0.2",
+   "description": "Using API lastUsed using in node.js, in the browser and for deno.",
+-  "type": "module",
+   "main": "./cjs/index.js",
+   "exports": {
+     ".": {
