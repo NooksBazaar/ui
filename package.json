@@ -22,7 +22,7 @@
     "@nooksbazaar/i18next-locize-backend": "^4.0.5",
     "isomorphic-unfetch": "3.0.0",
     "locize-editor": "^3.0.0",
-    "locize-lastused": "^3.0.2",
+    "@nooksbazaar/locize-lastused": "^3.0.2",
     "lodash": "^4.17.15",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^2.0.6",

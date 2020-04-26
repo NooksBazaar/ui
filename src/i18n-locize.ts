@@ -9,7 +9,7 @@ import { get } from 'lodash';
 import Axios from 'axios';
 
 import i18nextLocizeBackend from '@nooksbazaar/i18next-locize-backend';
-import locizeNodeLastUsed from 'locize-lastused';
+import locizeNodeLastUsed from '@nooksbazaar/locize-lastused';
 
 const logger = console;
 
