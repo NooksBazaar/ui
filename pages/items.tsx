@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Divider, Paper } from '@material-ui/core';
+import { Container, Paper } from '@material-ui/core';
 import Axios from 'axios';
 import { stringify } from 'qs';
 import { GenericItem } from '../src/components/items/generic-item';
+import { FixedSizeList as List } from 'react-window';
+import { useWindowSize } from 'react-use';
+import styled from 'styled-components';
 
 interface ItemsProps {
   items: any[];
@@ -10,7 +13,6 @@ interface ItemsProps {
 
 async function fetchItems(): Promise<any[]> {
   const filter = {
-    limit: 15,
     where: {
       sourceSheet: 'Housewares',
     },
@@ -25,8 +27,25 @@ async function fetchItems(): Promise<any[]> {
   return res.data;
 }
 
+const ItemBox = styled.div`
+  border-bottom: 1px solid ${({ theme }) => theme.palette.divider};
+  padding: ${({ theme }) => theme.spacing(1)}px;
+  background: ${({ theme }) => theme.palette.background.paper};
+  overflow-y: hidden;
+  height: unset !important;
+  min-height: 150px;
+  max-height: 150px;
+  transition: ${({ theme }) => theme.transitions.create('max-height')};
+
+  &:hover {
+    max-height: 300px;
+    z-index: 1;
+  }
+`
+
 export default function Items({ items }: ItemsProps) {
   const [data, setData] = useState(items || []);
+  const { height } = useWindowSize(1920, 1080);
 
   useEffect(() => {
     if (data.length > 0) {
@@ -39,14 +58,19 @@ export default function Items({ items }: ItemsProps) {
   return (
     <Container maxWidth="lg">
       <Paper>
-        {data.map((item) => (
-          <React.Fragment key={item.id}>
-            <Box p={1}>
-              <GenericItem item={item} />
-            </Box>
-            <Divider />
-          </React.Fragment>
-        ))}
+        <List
+          className="List"
+          height={height - 32}
+          itemCount={data.length}
+          itemSize={150}
+          width="100%"
+        >
+          {({ index, style }) => (
+            <ItemBox style={style}>
+              <GenericItem item={data[index]} />
+            </ItemBox>
+          )}
+        </List>
       </Paper>
     </Container>
   );

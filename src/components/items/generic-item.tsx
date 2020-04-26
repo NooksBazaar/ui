@@ -30,7 +30,7 @@ export interface GenericItemProps {
 function NotForSale() {
   return (
     <Tooltip title="Not for sale">
-      <abbr title="Not for sale">NFS</abbr>
+      <abbr>NFS</abbr>
     </Tooltip>
   );
 }
@@ -75,11 +75,19 @@ export function GenericItem({ item }: GenericItemProps) {
           <strong>{t('item.sell', 'Sell:')}</strong> {store.displayVariant.sell}
         </Typography>
 
-        {item.variants.map((variant: any) => {
+        {item.variants?.length > 1 && item.variants.map((variant: any) => {
+          let name = variant.variation;
+
+          if (variant.colors) {
+            const colors = new Set([...variant.colors]);
+
+            name += ` (${[...colors].join(' / ')})`
+          }
+
           return (
             <Tooltip
-              title={variant.variation}
-              key={variant.variation}
+              title={name}
+              key={variant.uniqueEntryId}
               placement="top"
             >
               <VariantImage
