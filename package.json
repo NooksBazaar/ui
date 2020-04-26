@@ -7,7 +7,7 @@
     "start": "next start",
     "type-check": "tsc",
     "prettier:fix": "prettier --write '**/*.{ts,tsx}'",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package --exclude=nothing"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
