@@ -356,7 +356,6 @@ export function i18nextLocize(lang: string, defaultLocales: I18nextResources) {
     i18nInstance.use(require('locize-editor').default);
   }
 
-
   i18nInstance.init({
     // XXX See https://www.i18next.com/overview/configuration-options
     resources: defaultLocales,

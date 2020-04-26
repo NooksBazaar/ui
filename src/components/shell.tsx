@@ -40,8 +40,7 @@ const Navigation = styled.div`
   background: ${({ theme }) => theme.palette.background.paper};
   grid-area: nav;
   z-index: 1;
-  padding-top: ${({ theme }) => theme.spacing(2)}px;
-  padding-bottom: ${({ theme }) => theme.spacing(2)}px;
+  padding: ${({ theme }) => theme.spacing(2)}px;
   box-shadow: ${({ theme }) => theme.shadows[2]};
 
   ${({ theme }) => theme.breakpoints.up('md')} {
@@ -68,6 +67,21 @@ export interface ShellProps {
   children: React.ReactNode;
 }
 
+const NavItem = styled(ListItem)`
+  margin-bottom: ${({ theme }) => theme.spacing(2)}px;
+  padding: ${({ theme }) => theme.spacing(1, 2)};
+  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
+
+  .MuiListItemIcon-root {
+    min-width: unset;
+    margin-right: ${({ theme }) => theme.spacing(2)}px;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+`;
+
 export function Shell({ children }: ShellProps) {
   const router = useRouter();
   const { t } = useTranslation('common');
@@ -81,24 +95,24 @@ export function Shell({ children }: ShellProps) {
 
         <List component="nav" aria-label="site navbar">
           <Link href="/">
-            <ListItem button selected={router.pathname === '/'}>
+            <NavItem button selected={router.pathname === '/'}>
               <ListItemIcon>
                 <SvgIcon>
                   <FontAwesomeIcon icon={['fas', 'home']} />
                 </SvgIcon>
               </ListItemIcon>
               <ListItemText primary={t('page.home', 'Home')} />
-            </ListItem>
+            </NavItem>
           </Link>
           <Link href="/items">
-            <ListItem button selected={router.pathname === '/items'}>
+            <NavItem button selected={router.pathname === '/items'}>
               <ListItemIcon>
                 <SvgIcon>
-                  <FontAwesomeIcon icon={['fas', 'blender-phone']} />
+                  <FontAwesomeIcon icon={['fas', 'box']} />
                 </SvgIcon>
               </ListItemIcon>
               <ListItemText primary={t('page.items', 'Items')} />
-            </ListItem>
+            </NavItem>
           </Link>
         </List>
       </Navigation>

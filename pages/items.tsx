@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Container, Paper } from '@material-ui/core';
 import Axios from 'axios';
 import { stringify } from 'qs';
 import { GenericItem } from '../src/components/items/generic-item';
-import { FixedSizeList as List } from 'react-window';
-import { useWindowSize } from 'react-use';
 import styled from 'styled-components';
+import { BehaviorSubject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 interface ItemsProps {
   items: any[];
 }
 
-async function fetchItems(): Promise<any[]> {
-  const filter = {
-    where: {
-      sourceSheet: 'Housewares',
-    },
+async function fetchItems(searchTerm?: string): Promise<any[]> {
+  const filter: any = {
+    limit: 15,
+    where: {},
   };
+
+  if (searchTerm) {
+    filter.where.name = { like: searchTerm };
+  }
 
   const params = stringify({
     filter: JSON.stringify(filter),
@@ -30,22 +33,29 @@ async function fetchItems(): Promise<any[]> {
 const ItemBox = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.palette.divider};
   padding: ${({ theme }) => theme.spacing(1)}px;
-  background: ${({ theme }) => theme.palette.background.paper};
-  overflow-y: hidden;
-  height: unset !important;
-  min-height: 150px;
-  max-height: 150px;
-  transition: ${({ theme }) => theme.transitions.create('max-height')};
 
-  &:hover {
-    max-height: 300px;
-    z-index: 1;
+  &:last-of-type {
+    border-bottom: none;
   }
-`
+`;
+
+const SearchBox = styled.div`
+  box-shadow: ${({ theme }) => theme.shadows[1]};
+  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
+  margin-bottom: ${({ theme }) => theme.spacing(2)}px;
+`;
+
+const SearchInput = styled.input`
+  border: none;
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing(3)}px;
+  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
+  font-size: ${({ theme }) => theme.typography.h6.fontSize};
+`;
 
 export default function Items({ items }: ItemsProps) {
   const [data, setData] = useState(items || []);
-  const { height } = useWindowSize(1920, 1080);
+  const searchTerm$ = useMemo(() => new BehaviorSubject(''), []);
 
   useEffect(() => {
     if (data.length > 0) {
@@ -55,22 +65,30 @@ export default function Items({ items }: ItemsProps) {
     fetchItems().then(setData);
   }, []);
 
+  useEffect(() => {
+    const observable = searchTerm$
+      .pipe(debounceTime(200))
+      .subscribe((value) => fetchItems(value).then(setData));
+
+    return () => observable.unsubscribe();
+  }, []);
+
   return (
     <Container maxWidth="lg">
+      <SearchBox>
+        <SearchInput
+          type="text"
+          placeholder="Enter search term"
+          onChange={(e) => searchTerm$.next(e.target.value)}
+        />
+      </SearchBox>
+
       <Paper>
-        <List
-          className="List"
-          height={height - 32}
-          itemCount={data.length}
-          itemSize={150}
-          width="100%"
-        >
-          {({ index, style }) => (
-            <ItemBox style={style}>
-              <GenericItem item={data[index]} />
-            </ItemBox>
-          )}
-        </List>
+        {data.map((item) => (
+          <ItemBox key={item.id}>
+            <GenericItem item={item} />
+          </ItemBox>
+        ))}
       </Paper>
     </Container>
   );
