@@ -36,11 +36,20 @@ function NotForSale() {
 }
 
 export function GenericItem({ item }: GenericItemProps) {
+  const { t } = useTranslation('common');
+
   if (!item.variants) {
-    return <p>Imagine there was lovely information of {item.name} here.</p>;
+    return (
+      <p>
+        {t(
+          'items.card.unsupported',
+          'Imagine there was lovely information of {{name}} here.',
+          { name: item.name },
+        )}
+      </p>
+    );
   }
 
-  const { t } = useTranslation('common');
   const store = useLocalStore(() => ({
     activeVariant: item.variants[0],
     displayVariant: item.variants[0],
@@ -59,7 +68,8 @@ export function GenericItem({ item }: GenericItemProps) {
   }));
 
   return useObserver(() => {
-    const imageUrl = store.displayVariant.image || store.displayVariant.storageImage;
+    const imageUrl =
+      store.displayVariant.image || store.displayVariant.storageImage;
 
     return (
       <Grid container>
@@ -79,33 +89,38 @@ export function GenericItem({ item }: GenericItemProps) {
               store.displayVariant.buy
             )}{' '}
             <br />
-            <strong>{t('item.sell', 'Sell:')}</strong> {store.displayVariant.sell}
+            <strong>{t('item.sell', 'Sell:')}</strong>{' '}
+            {store.displayVariant.sell}
           </Typography>
 
           {item.variants?.length > 1 &&
-          item.variants.map((variant: any) => {
-            const imageUrl = variant.image || variant.storageImage;
-            let name = variant.variation;
+            item.variants.map((variant: any) => {
+              const imageUrl = variant.image || variant.storageImage;
+              let name = variant.variation;
 
-            if (variant.colors) {
-              const colors = new Set([...variant.colors]);
+              if (variant.colors) {
+                const colors = new Set([...variant.colors]);
 
-              name += ` (${[...colors].join(' / ')})`;
-            }
+                name += ` (${[...colors].join(' / ')})`;
+              }
 
-            return (
-              <Tooltip title={name} key={variant.uniqueEntryId} placement="top">
-                <VariantImage
-                  src={imageUrl}
-                  onMouseOver={() => store.setDisplayVariant(variant)}
-                  onMouseOut={() => store.resetToActive()}
-                  onClick={() => store.setActiveVariant(variant)}
-                />
-              </Tooltip>
-            );
-          })}
+              return (
+                <Tooltip
+                  title={name}
+                  key={variant.uniqueEntryId}
+                  placement="top"
+                >
+                  <VariantImage
+                    src={imageUrl}
+                    onMouseOver={() => store.setDisplayVariant(variant)}
+                    onMouseOut={() => store.resetToActive()}
+                    onClick={() => store.setActiveVariant(variant)}
+                  />
+                </Tooltip>
+              );
+            })}
         </Grid>
       </Grid>
-    )
+    );
   });
 }

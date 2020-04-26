@@ -6,6 +6,7 @@ import { GenericItem } from '../src/components/items/generic-item';
 import styled from 'styled-components';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { useTranslation } from 'react-i18next';
 
 interface ItemsProps {
   items: any[];
@@ -54,6 +55,7 @@ const SearchInput = styled.input`
 `;
 
 export default function Items({ items }: ItemsProps) {
+  const { t } = useTranslation('common');
   const [data, setData] = useState(items || []);
   const searchTerm$ = useMemo(() => new BehaviorSubject(''), []);
 
@@ -78,7 +80,7 @@ export default function Items({ items }: ItemsProps) {
       <SearchBox>
         <SearchInput
           type="text"
-          placeholder="Enter search term"
+          placeholder={t('items.search-term', 'Enter search term')}
           onChange={(e) => searchTerm$.next(e.target.value)}
         />
       </SearchBox>
