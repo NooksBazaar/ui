@@ -97,6 +97,7 @@ MyDocument.getInitialProps = async (ctx) => {
     styles: [
       ...React.Children.toArray(initialProps.styles),
       muiSheets.getStyleElement(),
+      styledSheets.getStyleElement(),
     ],
     lang,
   };
