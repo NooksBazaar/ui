@@ -53,7 +53,7 @@ export default function Items({ items }: ItemsProps) {
 }
 
 Items.getInitialProps = async () => {
-  const items = fetchItems();
+  const items = await fetchItems();
 
   return { items };
 };
