@@ -69,6 +69,7 @@ export default function Items({ items }: ItemsProps) {
   const { t } = useTranslation('common');
   const [data, setData] = useState(items);
   const searchTerm$ = useMemo(() => new BehaviorSubject(query.term as string || ''), []);
+  const [term, setTerm] = useState(searchTerm$.value);
 
   useEffect(() => {
     if (data?.items.length > 0) {
@@ -77,6 +78,10 @@ export default function Items({ items }: ItemsProps) {
 
     fetchItems().then(setData);
   }, []);
+
+  useEffect(() => {
+    searchTerm$.next(term);
+  }, [term]);
 
   useEffect(() => {
     const observable = searchTerm$
@@ -94,8 +99,9 @@ export default function Items({ items }: ItemsProps) {
       <SearchBox>
         <SearchInput
           type="text"
+          value={term}
           placeholder={t('items.search-term', 'Enter search term')}
-          onChange={(e) => searchTerm$.next(e.target.value)}
+          onChange={(e) => setTerm(e.target.value)}
         />
       </SearchBox>
 
