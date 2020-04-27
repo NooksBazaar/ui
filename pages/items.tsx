@@ -26,7 +26,7 @@ async function fetchItems(searchTerm?: string): Promise<Response> {
   };
 
   if (searchTerm) {
-    filter.where.name = { like: searchTerm };
+    filter.where.name = { ilike: searchTerm };
   }
 
   const params = stringify({
@@ -88,7 +88,10 @@ export default function Items({ items }: ItemsProps) {
       .pipe(debounceTime(200))
       .subscribe((value) => {
         fetchItems(value).then(setData);
-        push(`/items?term=${value}`);
+
+        if (query.term || value) {
+          push(`/items?term=${value}`);
+        }
       });
 
     return () => observable.unsubscribe();

@@ -94,7 +94,7 @@ export function Shell({ children }: ShellProps) {
         </LogoContainer>
 
         <List component="nav" aria-label="site navbar">
-          <Link href="/">
+          {/*<Link href="/">
             <NavItem button selected={router.pathname === '/'}>
               <ListItemIcon>
                 <SvgIcon>
@@ -103,7 +103,7 @@ export function Shell({ children }: ShellProps) {
               </ListItemIcon>
               <ListItemText primary={t('page.home', 'Home')} />
             </NavItem>
-          </Link>
+          </Link>*/}
           <Link href="/items">
             <NavItem button selected={router.pathname === '/items'}>
               <ListItemIcon>
