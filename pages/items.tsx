@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/router';
+import { NextPageContext } from 'next';
 
 interface Response {
   items: any[],
@@ -63,9 +65,10 @@ const SearchInput = styled.input`
 `;
 
 export default function Items({ items }: ItemsProps) {
+  const { query, push } = useRouter();
   const { t } = useTranslation('common');
   const [data, setData] = useState(items);
-  const searchTerm$ = useMemo(() => new BehaviorSubject(''), []);
+  const searchTerm$ = useMemo(() => new BehaviorSubject(query.term as string || ''), []);
 
   useEffect(() => {
     if (data?.items.length > 0) {
@@ -78,7 +81,10 @@ export default function Items({ items }: ItemsProps) {
   useEffect(() => {
     const observable = searchTerm$
       .pipe(debounceTime(200))
-      .subscribe((value) => fetchItems(value).then(setData));
+      .subscribe((value) => {
+        fetchItems(value).then(setData);
+        push(`/items?term=${value}`);
+      });
 
     return () => observable.unsubscribe();
   }, []);
@@ -108,8 +114,8 @@ export default function Items({ items }: ItemsProps) {
   );
 }
 
-Items.getInitialProps = async () => {
-  const items = await fetchItems();
+Items.getInitialProps = async ({ query }: NextPageContext) => {
+  const items = await fetchItems(query.term as string);
 
   return { items };
 };
