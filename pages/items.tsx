@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Container, Paper } from '@material-ui/core';
+import { Container, Paper, Typography } from '@material-ui/core';
 import Axios from 'axios';
 import { stringify } from 'qs';
 import { GenericItem } from '../src/components/items/generic-item';
@@ -8,11 +8,16 @@ import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { useTranslation } from 'react-i18next';
 
-interface ItemsProps {
-  items: any[];
+interface Response {
+  items: any[],
+  count: number,
 }
 
-async function fetchItems(searchTerm?: string): Promise<any[]> {
+interface ItemsProps {
+  items: Response;
+}
+
+async function fetchItems(searchTerm?: string): Promise<Response> {
   const filter: any = {
     limit: 15,
     where: {},
@@ -28,7 +33,10 @@ async function fetchItems(searchTerm?: string): Promise<any[]> {
 
   const res = await Axios.get(`https://api-dev.bazaar.ac/items?${params}`);
 
-  return res.data;
+  return {
+    items: res.data,
+    count: res.headers['pagination-count'],
+  };
 }
 
 const ItemBox = styled.div`
@@ -56,11 +64,11 @@ const SearchInput = styled.input`
 
 export default function Items({ items }: ItemsProps) {
   const { t } = useTranslation('common');
-  const [data, setData] = useState(items || []);
+  const [data, setData] = useState(items);
   const searchTerm$ = useMemo(() => new BehaviorSubject(''), []);
 
   useEffect(() => {
-    if (data.length > 0) {
+    if (data?.items.length > 0) {
       return;
     }
 
@@ -85,8 +93,12 @@ export default function Items({ items }: ItemsProps) {
         />
       </SearchBox>
 
+      <Typography>
+        Found {data?.count} results.
+      </Typography>
+
       <Paper>
-        {data.map((item) => (
+        {data?.items.map((item) => (
           <ItemBox key={item.id}>
             <GenericItem item={item} />
           </ItemBox>

@@ -38,21 +38,21 @@ function NotForSale() {
 export function GenericItem({ item }: GenericItemProps) {
   const { t } = useTranslation('common');
 
-  if (!item.variants) {
-    return (
-      <p>
-        {t(
-          'items.card.unsupported',
-          'Imagine there was lovely information of {{name}} here.',
-          { name: item.name },
-        )}
-      </p>
-    );
-  }
+  // if (!item.variants) {
+  //   return (
+  //     <p>
+  //       {t(
+  //         'items.card.unsupported',
+  //         'Imagine there was lovely information of {{name}} here.',
+  //         { name: item.name },
+  //       )}
+  //     </p>
+  //   );
+  // }
 
   const store = useLocalStore(() => ({
-    activeVariant: item.variants[0],
-    displayVariant: item.variants[0],
+    activeVariant: item.variants?.[0] ?? item,
+    displayVariant: item.variants?.[0] ?? item,
 
     setActiveVariant(variant: any) {
       store.activeVariant = variant;
@@ -67,60 +67,53 @@ export function GenericItem({ item }: GenericItemProps) {
     },
   }));
 
-  return useObserver(() => {
-    const imageUrl =
-      store.displayVariant.image || store.displayVariant.storageImage;
-
-    return (
-      <Grid container>
-        <Grid item sm={2}>
-          <ItemImage src={imageUrl} alt={item.name} />
-        </Grid>
-        <Grid item sm={10}>
-          <Typography variant="h6">
-            {store.displayVariant.name || item.name}
-          </Typography>
-
-          <Typography variant="body1">
-            <strong>{t('item.buy', 'Buy:')}</strong>{' '}
-            {store.displayVariant.buy === -1 ? (
-              <NotForSale />
-            ) : (
-              store.displayVariant.buy
-            )}{' '}
-            <br />
-            <strong>{t('item.sell', 'Sell:')}</strong>{' '}
-            {store.displayVariant.sell}
-          </Typography>
-
-          {item.variants?.length > 1 &&
-            item.variants.map((variant: any) => {
-              const imageUrl = variant.image || variant.storageImage;
-              let name = variant.variation;
-
-              if (variant.colors) {
-                const colors = new Set([...variant.colors]);
-
-                name += ` (${[...colors].join(' / ')})`;
-              }
-
-              return (
-                <Tooltip
-                  title={name}
-                  key={variant.uniqueEntryId}
-                  placement="top"
-                >
-                  <VariantImage
-                    src={imageUrl}
-                    onMouseOver={() => store.setDisplayVariant(variant)}
-                    onMouseOut={() => store.resetToActive()}
-                    onClick={() => store.setActiveVariant(variant)}
-                  />
-                </Tooltip>
-              );
-            })}
-        </Grid>
+  return useObserver(() => (
+    <Grid container alignItems="center" style={{minHeight: 128}}>
+      <Grid item sm={2}>
+        <ItemImage src={getImageUrl(store.displayVariant)} alt={item.name} />
       </Grid>
-    );
-  });
+      <Grid item sm={10}>
+        <Typography variant="h6">
+          {store.displayVariant.name || item.name}
+        </Typography>
+
+        <Typography variant="body1">
+          <strong>{t('item.buy', 'Buy:')}</strong>{' '}
+          {(store.displayVariant.buy === -1 || !store.displayVariant.buy) ? (
+            <NotForSale />
+          ) : (
+            store.displayVariant.buy
+          )}{' '}
+          <br />
+          <strong>{t('item.sell', 'Sell:')}</strong> {store.displayVariant.sell}
+        </Typography>
+
+        {item.variants?.length > 1 &&
+          item.variants.map((variant: any) => {
+            let name = variant.variation;
+
+            if (variant.colors) {
+              const colors = new Set([...variant.colors]);
+
+              name += ` (${[...colors].join(' / ')})`;
+            }
+
+            return (
+              <Tooltip title={name} key={variant.uniqueEntryId} placement="top">
+                <VariantImage
+                  src={getImageUrl(variant)}
+                  onMouseOver={() => store.setDisplayVariant(variant)}
+                  onMouseOut={() => store.resetToActive()}
+                  onClick={() => store.setActiveVariant(variant)}
+                />
+              </Tooltip>
+            );
+          })}
+      </Grid>
+    </Grid>
+  ));
+}
+
+function getImageUrl(variant: any) {
+  return variant.image || variant.storageImage || variant.inventoryImage || variant.critterpediaImage || variant.framedImage;
 }
