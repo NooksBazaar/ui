@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import { AppProps } from 'next/app';
+import App, { AppProps } from 'next/app';
 import { ThemeProvider } from 'styled-components';
 import {
   ThemeProvider as MuiThemeProvider,
@@ -10,7 +10,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Shell } from '../src/components/shell';
 import '../src/icons';
 import { themes } from '../src/themes';
-import { AppContextType } from 'next/dist/next-server/lib/utils';
 import NextCookies from 'next-cookies';
 import { Cookies } from '../types/cookies';
 import { IncomingMessage } from 'http';
@@ -22,6 +21,7 @@ import {
   I18nextResources,
 } from '../src/i18n-locize';
 import { I18nextProvider } from 'react-i18next';
+import { AppContext } from 'next/dist/pages/_app';
 
 type MyAppProps = AppProps<{
   lang: string;
@@ -68,7 +68,8 @@ export default function MyApp(props: MyAppProps) {
   );
 }
 
-MyApp.getInitialProps = async ({ ctx }: AppContextType) => {
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  const { ctx } = appContext;
   const { req } = ctx;
   const readonlyCookies: Cookies = NextCookies(ctx); // Parses Next.js cookies in a universal way (server + client)
   let publicHeaders: any = {};
@@ -93,10 +94,14 @@ MyApp.getInitialProps = async ({ ctx }: AppContextType) => {
     },
   });
 
+  const appProps = await App.getInitialProps(appContext);
+
   const defaultLocales: I18nextResources = await fetchTranslations(lang); // Pre-fetches translations from Locize API
 
   return {
+    ...appProps,
     pageProps: {
+      ...appProps.pageProps,
       lang,
       defaultLocales,
     },
