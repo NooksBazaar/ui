@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Facet } from './facets/facet';
-import { useForm, useFormState } from 'react-final-form';
+import { useForm } from 'react-final-form';
 
 export interface FacetFilterProps {
   // TODO: Add props
