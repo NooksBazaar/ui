@@ -3,6 +3,7 @@ import {
   faBlenderPhone,
   faBox,
   faHome,
+  faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faBlenderPhone, faHome, faBox);
+library.add(faBlenderPhone, faHome, faBox, faPlusCircle);

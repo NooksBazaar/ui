@@ -1,32 +1,31 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Container, Paper, Typography } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
 import Axios from 'axios';
 import { stringify } from 'qs';
 import { GenericItem } from '../src/components/items/generic-item';
 import styled from 'styled-components';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next';
+import { useObserver } from 'mobx-react-lite';
+import { Filter } from '../src/components/filter/filter';
+import { buildFilter } from '../src/components/filter/build-filter';
 
 interface Response {
-  items: any[],
-  count: number,
+  items: any[];
+  count: number;
 }
 
 interface ItemsProps {
   items: Response;
 }
 
-async function fetchItems(searchTerm?: string): Promise<Response> {
-  const filter: any = {
-    limit: 15,
-    where: {},
-  };
+async function fetchItems(filter: any): Promise<Response> {
+  filter = buildFilter(filter);
 
-  if (searchTerm) {
-    filter.where.name = { ilike: searchTerm };
+  if (!filter.limit) {
+    filter.limit = 100;
   }
 
   const params = stringify({
@@ -41,6 +40,21 @@ async function fetchItems(searchTerm?: string): Promise<Response> {
   };
 }
 
+
+function parseFilter(rawFilter?: string) {
+  let filter = {};
+
+  if (rawFilter) {
+    try {
+      filter = JSON.parse(rawFilter as string);
+    } catch (e) {
+      // ignore parse error
+    }
+  }
+
+  return filter;
+}
+
 const ItemBox = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.palette.divider};
   padding: ${({ theme }) => theme.spacing(1)}px;
@@ -50,67 +64,46 @@ const ItemBox = styled.div`
   }
 `;
 
-const SearchBox = styled.div`
-  box-shadow: ${({ theme }) => theme.shadows[1]};
-  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
-  margin-bottom: ${({ theme }) => theme.spacing(2)}px;
-`;
-
-const SearchInput = styled.input`
-  border: none;
-  width: 100%;
-  padding: ${({ theme }) => theme.spacing(3)}px;
-  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
-  font-size: ${({ theme }) => theme.typography.h6.fontSize};
-`;
-
 export default function Items({ items }: ItemsProps) {
   const { query, push } = useRouter();
-  const { t } = useTranslation('common');
   const [data, setData] = useState(items);
-  const searchTerm$ = useMemo(() => new BehaviorSubject(query.term as string || ''), []);
-  const [term, setTerm] = useState(searchTerm$.value);
+  const filter$ = useMemo(
+    () => new BehaviorSubject(parseFilter(query?.filter as string)),
+    []
+  );
 
   useEffect(() => {
     if (data?.items.length > 0) {
       return;
     }
 
-    fetchItems().then(setData);
+    fetchItems({}).then(setData);
   }, []);
 
   useEffect(() => {
-    searchTerm$.next(term);
-  }, [term]);
-
-  useEffect(() => {
-    const observable = searchTerm$
+    const observable = filter$
       .pipe(debounceTime(200))
       .subscribe((value) => {
         fetchItems(value).then(setData);
 
-        if (query.term || value) {
-          push(`/items?term=${value}`);
+        if (value) {
+          push(`/items?filter=${JSON.stringify(value)}`);
         }
       });
 
     return () => observable.unsubscribe();
   }, []);
 
-  return (
-    <Container maxWidth="lg">
-      <SearchBox>
-        <SearchInput
-          type="text"
-          value={term}
-          placeholder={t('items.search-term', 'Enter search term')}
-          onChange={(e) => setTerm(e.target.value)}
-        />
-      </SearchBox>
+  return useObserver(() => (
+    <>
+      <Filter
+        value={filter$.value}
+        onChange={(values) => {
+          filter$.next(values);
+        }}
+      />
 
-      <Typography>
-        Found {data?.count} results.
-      </Typography>
+      <Typography>Found {data?.count} results.</Typography>
 
       <Paper>
         {data?.items.map((item) => (
@@ -119,12 +112,12 @@ export default function Items({ items }: ItemsProps) {
           </ItemBox>
         ))}
       </Paper>
-    </Container>
-  );
+    </>
+  ));
 }
 
 Items.getInitialProps = async ({ query }: NextPageContext) => {
-  const items = await fetchItems(query.term as string);
+  const items = await fetchItems(parseFilter(query?.filter as string));
 
   return { items };
 };

@@ -68,8 +68,8 @@ export function GenericItem({ item }: GenericItemProps) {
   }));
 
   return useObserver(() => (
-    <Grid container alignItems="center" style={{minHeight: 128}}>
-      <Grid item sm={2}>
+    <Grid container alignItems="center" style={{ minHeight: 128 }} spacing={1}>
+      <Grid item sm={2} style={{ maxWidth: 128 }}>
         <ItemImage src={getImageUrl(store.displayVariant)} alt={item.name} />
       </Grid>
       <Grid item sm={10}>
@@ -79,7 +79,7 @@ export function GenericItem({ item }: GenericItemProps) {
 
         <Typography variant="body1">
           <strong>{t('item.buy', 'Buy:')}</strong>{' '}
-          {(store.displayVariant.buy === -1 || !store.displayVariant.buy) ? (
+          {store.displayVariant.buy === -1 || !store.displayVariant.buy ? (
             <NotForSale />
           ) : (
             store.displayVariant.buy
@@ -93,9 +93,13 @@ export function GenericItem({ item }: GenericItemProps) {
             let name = variant.variation;
 
             if (variant.colors) {
-              const colors = new Set([...variant.colors]);
+              const colors = Array.from(new Set([...variant.colors])).join(
+                ' / ',
+              );
 
-              name += ` (${[...colors].join(' / ')})`;
+              if (colors !== name) {
+                name += ` (${colors})`;
+              }
             }
 
             return (
@@ -115,5 +119,11 @@ export function GenericItem({ item }: GenericItemProps) {
 }
 
 function getImageUrl(variant: any) {
-  return variant.image || variant.storageImage || variant.inventoryImage || variant.critterpediaImage || variant.framedImage;
+  return (
+    variant.image ||
+    variant.storageImage ||
+    variant.inventoryImage ||
+    variant.critterpediaImage ||
+    variant.framedImage
+  );
 }

@@ -59,7 +59,7 @@ MyDocument.getInitialProps = async (ctx) => {
 
   // Universally detects the user's language
   const lang = universalLanguageDetect({
-    supportedLanguages: SUPPORTED_LANGUAGES, // Whitelist of supported languages, will be used to filter out languages that aren't supported
+    supportedLanguages: SUPPORTED_LANGUAGES, // Whitelist of supported languages, will be used to Filter out languages that aren't supported
     fallbackLanguage: 'en', // Fallback language in case the user's language cannot be resolved
     acceptLanguageHeader: ctx.req?.headers['accept-language'], // Optional - Accept-language header will be used when resolving the language on the server side
     serverCookies: cookies, // Optional - Cookie "i18next" takes precedence over navigator configuration (ex: "i18next: fr"), will only be used on the server side

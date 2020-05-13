@@ -10,7 +10,7 @@ export default function Index() {
 
   useEffect(() => {
     push('/items');
-  }, [])
+  }, []);
 
   return (
     <Container maxWidth="sm">
@@ -26,8 +26,8 @@ export default function Index() {
 Index.getInitialProps = async ({ res }: NextPageContext) => {
   if (res) {
     res.writeHead(302, {
-      Location: '/items'
+      Location: '/items',
     });
     res.end();
   }
-}
+};
