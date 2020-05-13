@@ -27,6 +27,7 @@ export function RangeFacet({ start, end }: RangeFacetProps) {
           fieldProps={{
             validate: numericality({
               int: true,
+              allowBlank: true,
               '>=': 0
             })
           }}
@@ -44,6 +45,7 @@ export function RangeFacet({ start, end }: RangeFacetProps) {
           fieldProps={{
             validate: numericality({
               int: true,
+              allowBlank: true,
               '>=': 0
             })
           }}
