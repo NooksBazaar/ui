@@ -20,7 +20,7 @@
     "@types/react-virtualized-auto-sizer": "^1.0.0",
     "@types/react-window": "^1.8.2",
     "@unly/universal-language-detector": "^2.0.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "final-form": "^4.19.1",
     "i18next": "^19.4.3",
     "i18next-browser-languagedetector": "^4.1.1",
